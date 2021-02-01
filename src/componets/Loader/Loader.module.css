@@ -1,0 +1,22 @@
+.Spinner{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10em;
+    font-size: 24px;
+   
+    
+};
+.iconSpin {
+  margin-right: 10px;
+  animation: icon-spin 2s infinite linear;
+
+}
+@keyframes iconSpin {
+  from{
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
