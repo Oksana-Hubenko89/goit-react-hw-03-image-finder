@@ -68,8 +68,6 @@ class App extends Component {
     };
 
     render() {
-      //console.log("App render");
-  
     
       const {imageName, page} = this.state;
       

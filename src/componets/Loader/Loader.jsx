@@ -4,7 +4,7 @@ import pendingImage from './pending.png';
 import f from './Loader.module.css';
   
 const s = {
-  spinner: {
+    spinner: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: 10,
@@ -29,6 +29,6 @@ const Loader = ({ imageName }) => {
     </div>
 
     )
-};
+}
 
 export default Loader;
