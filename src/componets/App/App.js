@@ -15,10 +15,11 @@ class App extends Component {
   static propTypes = {
    //
   }
-  
+
   state = {
     imageName: null,
   };
+  
   
   componentDidMount() {
     console.log('App componentDidMount');

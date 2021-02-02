@@ -17,13 +17,14 @@ class Searchbar extends Component {
         e.preventDefault();
 
         if (this.state.imageName.trim() === '') {
-        toast.error('Введите имя картинки');
-        return;
+            toast.error('Введите имя картинки');
+            return;
         }
 
-       this.props.onSubmit(this.state.imageName);
+        this.props.onSubmit(this.state.imageName);
         this.setState({ imageName: ' ' });
     };
+    
     componentDidUpdate(prevProps, prevState) {
         console.log('App componentDidUpdate');
 

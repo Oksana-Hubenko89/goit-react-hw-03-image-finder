@@ -16,7 +16,7 @@ class ImageGallery extends PureComponent {
     state = {
         
         showModal:false,
-        largeImageURL:'',
+        largeImageURL:null,
         page: 1,
         images: [],
         error: null,
@@ -49,15 +49,18 @@ class ImageGallery extends PureComponent {
             //imageApi
             fetch(API)
                 .then(response => response.json())
+                    
                 .then(data => {
-                    if (data.length !== 0) {
-                       
-                      return ( this.setState({ images: data.hits }),
-                        this.setState({ status: 'resolved' }))
+                    if (data.hits.length > 0) {
+                        return (
+                            this.setState({ images: data.hits }),
+                            this.setState({ status: 'resolved' }));
+                    }
+                    return Promise.reject(
+                        new Error(`Нет картинки с имененeм ${nextImage}`),);
+                
+                } )
                         
-                    };
-                   return  this.setState({ error: `Нет картинки с имененeм ${nextImage}` })
-                     })
                 .catch(error => this.setState({ error, status: 'rejected' }))
                 .finally(this.scroll)
             };
@@ -77,10 +80,11 @@ class ImageGallery extends PureComponent {
   behavior: 'smooth',
 }); }
      
-    togleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal
-    }))
+    togleModal = largeImageURL => {
+        this.setState(({ showModal }) => ({
+            showModal: !showModal
+        }));
+        this.setState(({ largeImageURL }));
   };
 
 
