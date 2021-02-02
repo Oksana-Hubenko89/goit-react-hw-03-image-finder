@@ -18,7 +18,6 @@ class ImageGallery extends PureComponent {
         showModal:false,
         largeImageURL: null,
         per_page:12,
-        //page: 1,
         images: [],
         error: null,
         status: 'idle',
@@ -76,11 +75,13 @@ class ImageGallery extends PureComponent {
           );
     };
      
+
     togleModal = largeImageURL => {
         this.setState(({ showModal }) => ({
             showModal: !showModal
         }));
         this.setState(({ largeImageURL }));
+        
     };
     
     handleDecrement = () => {
@@ -120,7 +121,7 @@ class ImageGallery extends PureComponent {
                 return < >
                 
                     <ul className={s.ImageGallery}>
-                        <ImageGalleryItem images={images} onClick={togleModal} largeImageURL={largeImageURL} />
+                        <ImageGalleryItem images={images} onClick={this.togleModal} largeImageURL={largeImageURL} />
                         
                          {showModal && <Modal togleModal={togleModal} largeImageURL={largeImageURL}/> }
                     </ul>
