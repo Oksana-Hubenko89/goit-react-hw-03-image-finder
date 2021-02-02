@@ -10,17 +10,22 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
 
   static defaultProps = {
-    //   
+     // 
   }
   static propTypes = {
    //
   }
 
   state = {
+    page:1,
     imageName: null,
   };
   
-  
+  incrementPage = () => {
+    this.setState(({ page }) =>
+      ({ page: page + 1 }));
+  };
+
   componentDidMount() {
     console.log('App componentDidMount');
   
@@ -45,19 +50,22 @@ class App extends Component {
       
   handleFormSubmit = imageName => {
     this.setState({ imageName });
-    
+    this.resetPage();
   };
- 
+  resetPage = () => {
+    this.setState({page:1})
+  }
+
   render() {
     //console.log("App render");
  
    
-    const {imageName} = this.state;
+    const {imageName, page} = this.state;
     
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
-        <ImageGallery  imageName={imageName} />
+        <ImageGallery  imageName={imageName} page={page} incrementPage={this.incrementPage} />
         <ToastContainer autoClose={3000} /> 
       </Container>
     )

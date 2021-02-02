@@ -9,15 +9,15 @@ import { toast } from 'react-toastify';
 import Modal from '../Modal';
 
 class ImageGallery extends PureComponent {
-    static defaultProps = {
-        // initialPage: 1,
-    };
+     static defaultProps = {
+     //
+  }
     
     state = {
-        
         showModal:false,
-        largeImageURL:null,
-        page: 1,
+        largeImageURL: null,
+        per_page:12,
+        //page: 1,
         images: [],
         error: null,
         status: 'idle',
@@ -38,12 +38,12 @@ class ImageGallery extends PureComponent {
 
         const prevImage = prevProps.imageName;
         const nextImage = this.props.imageName;
-        const prevPage = prevState.page;
-        const nextPage = this.state.page;
+        const prevPage = prevProps.page;
+        const nextPage = this.props.page;
               
        const  KEY= '19267530-a7778ead7c20bf1fd9d6edf89';
    
-       const API = `https://pixabay.com/api/?q=${nextImage}&page=${nextPage}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+       const API = `https://pixabay.com/api/?q=${nextImage}&page=${nextPage}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${this.state.per_page}`;
         if (nextImage !== prevImage || nextPage !== prevPage) {
             this.setState({ status: 'pending' });
             //imageApi
@@ -53,8 +53,8 @@ class ImageGallery extends PureComponent {
                 .then(data => {
                     if (data.hits.length > 0) {
                         return (
-                            this.setState({ images: data.hits }),
-                            this.setState({ status: 'resolved' }));
+                            this.setState(({images })=>({images:[...data.hits] })),
+                            this.setState({ status: 'resolved' }))
                     }
                     return Promise.reject(
                         new Error(`Нет картинки с имененeм ${nextImage}`),);
@@ -69,7 +69,7 @@ class ImageGallery extends PureComponent {
     updateGallery = res => {
         this.setState(
             prevState => ({
-                images: [...prevState.images, ...res]
+                images: [...prevState.images, ...res.hits]
             }),
             
           );
@@ -92,9 +92,11 @@ class ImageGallery extends PureComponent {
         if (this.state.images === [] ){
             return toast.error(`Enter a new name image or click Back...`)
         }
-        this.setState(({ page }) =>
-            ({ page: page + 1 }));
-        this.scroll();
+       
+        this.props.incrementPage();
+        // this.setState(({ page }) =>
+        //     ({ page: page + 1 }));
+            this.scroll();
         return;
     };  
    
@@ -102,8 +104,10 @@ class ImageGallery extends PureComponent {
         if (this.state.page === 1) {
             return toast.error(`Please click on Search more... or enter a new name image`)
         }
+        
         this.setState(({ page }) =>
             ({ page: page - 1 }));
+     
         this.scroll();
         return;
     };
