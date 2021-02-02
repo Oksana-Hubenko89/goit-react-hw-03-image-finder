@@ -104,10 +104,7 @@ class ImageGallery extends PureComponent {
         if (this.state.page === 1) {
             return toast.error(`Please click on Search more... or enter a new name image`)
         }
-        
-        this.setState(({ page }) =>
-            ({ page: page - 1 }));
-     
+        this.props.decrementPage();
         this.scroll();
         return;
     };

@@ -10,20 +10,25 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends Component {
 
   static defaultProps = {
-     // 
+    // 
   }
   static propTypes = {
-   //
+    //
   }
 
   state = {
-    page:1,
+    page: 1,
     imageName: null,
   };
   
   incrementPage = () => {
     this.setState(({ page }) =>
       ({ page: page + 1 }));
+  };
+
+  decrementPage = () => {
+    this.setState(({ page }) =>
+      ({ page: page - 1 }));
   };
 
   componentDidMount() {
@@ -65,7 +70,7 @@ class App extends Component {
     return (
       <Container>
         <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
-        <ImageGallery  imageName={imageName} page={page} incrementPage={this.incrementPage} />
+        <ImageGallery  imageName={imageName} page={page} incrementPage={this.incrementPage} decrementPage={this.decrementPage} />
         <ToastContainer autoClose={3000} /> 
       </Container>
     )
