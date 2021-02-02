@@ -66,16 +66,6 @@ class ImageGallery extends PureComponent {
             };
     };
 
-    updateGallery = res => {
-        this.setState(
-            prevState => ({
-                images: [...prevState.images, ...res.hits]
-            }),
-            
-          );
-    };
-     
-
     togleModal = largeImageURL => {
         this.setState(({ showModal }) => ({
             showModal: !showModal
