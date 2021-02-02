@@ -5,8 +5,9 @@ import s from './ImageGallery.module.css';
 import ImageErrorView from '../ImageErrorView';
 import Button from '../Button';
 import Loader from '../Loader';
-import { toast } from 'react-toastify';
 import Modal from '../Modal';
+import { toast } from 'react-toastify';
+
 
 class ImageGallery extends PureComponent {
      static defaultProps = {
@@ -62,7 +63,7 @@ class ImageGallery extends PureComponent {
                 } )
                         
                 .catch(error => this.setState({ error, status: 'rejected' }))
-                .finally(this.scroll)
+                .finally(this.props.scroll)
             };
     };
 
@@ -74,40 +75,33 @@ class ImageGallery extends PureComponent {
             
           );
     };
-
-    scroll = () => {window.scrollTo({
-  top: document.documentElement.scrollHeight,
-  behavior: 'smooth',
-}); }
      
     togleModal = largeImageURL => {
         this.setState(({ showModal }) => ({
             showModal: !showModal
         }));
         this.setState(({ largeImageURL }));
-  };
-
+    };
+    
+    handleDecrement = () => {
+        if (this.props.page > 1) {
+            this.props.decrementPage();
+        this.props.scroll();
+            return;  
+        }
+        return toast.error(`Please click on Search more... or enter a new name image`);
+        
+   };
 
     handleIncrement=()=> {
-        if (this.state.images === [] ){
-            return toast.error(`Enter a new name image or click Back...`)
-        }
-       
-        this.props.incrementPage();
-        // this.setState(({ page }) =>
-        //     ({ page: page + 1 }));
-            this.scroll();
+        if (this.state.images.length > 0) {
+            this.props.incrementPage();
+        this.props.scroll();
         return;
-    };  
-   
-    handleDecrement = () => {
-        if (this.state.page === 1) {
-            return toast.error(`Please click on Search more... or enter a new name image`)
+           
         }
-        this.props.decrementPage();
-        this.scroll();
-        return;
-    };
+        return toast.error(`Enter a new name image or click Back...`); 
+  }; 
 
         render() {
             const {error, status , images, largeImageURL, showModal} = this.state;

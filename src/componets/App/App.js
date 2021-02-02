@@ -6,74 +6,80 @@ import Container from '../Container';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 class App extends Component {
 
-  static defaultProps = {
-    // 
-  }
-  static propTypes = {
-    //
-  }
-
-  state = {
-    page: 1,
-    imageName: null,
-  };
-  
-  incrementPage = () => {
-    this.setState(({ page }) =>
-      ({ page: page + 1 }));
-  };
-
-  decrementPage = () => {
-    this.setState(({ page }) =>
-      ({ page: page - 1 }));
-  };
-
-  componentDidMount() {
-    console.log('App componentDidMount');
-  
-    const imageName = localStorage.getItem("imageName");
-    const parsedImages = JSON.parse(imageName);
-
-    if (parsedImages) {
-      this.setState({ imageName: parsedImages });
+    static defaultProps = {
+      // 
     }
-  };
-  
-
- componentDidUpdate(prevProps, prevState) {
-    console.log('App componentDidUpdate');
-
-    if (this.state.imageName !== prevState.imageName) {
-      console.log('Oбновилось поле images, записываю в хранилище');
-
-     localStorage.setItem('imageName', JSON.stringify(this.state.imageName));
+    static propTypes = {
+      //
     }
-  };
-      
-  handleFormSubmit = imageName => {
-    this.setState({ imageName });
-    this.resetPage();
-  };
-  resetPage = () => {
-    this.setState({page:1})
-  }
 
-  render() {
-    //console.log("App render");
- 
-   
-    const {imageName, page} = this.state;
+    state = {
+      page: 1,
+      imageName: null,
+    };
+
+    componentDidMount() {
+      console.log('App componentDidMount');
     
-    return (
-      <Container>
-        <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
-        <ImageGallery  imageName={imageName} page={page} incrementPage={this.incrementPage} decrementPage={this.decrementPage} />
-        <ToastContainer autoClose={3000} /> 
-      </Container>
-    )
+      const imageName = localStorage.getItem("imageName");
+      const parsedImages = JSON.parse(imageName);
+
+      if (parsedImages) {
+        this.setState({ imageName: parsedImages });
+      }
+    };
+
+    componentDidUpdate(prevProps, prevState) {
+      console.log('App componentDidUpdate');
+
+      if (this.state.imageName !== prevState.imageName) {
+        console.log('Oбновилось поле images, записываю в хранилище');
+
+      localStorage.setItem('imageName', JSON.stringify(this.state.imageName));
+      }
+    };
+
+    scroll = () => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    };
+        
+    handleFormSubmit = imageName => {
+      this.setState({ imageName });
+      this.resetPage();
+    };
+  
+    incrementPage = () => {
+      this.setState(({ page }) =>
+        ({ page: page + 1 }));
+    };
+
+    decrementPage = () => {
+      this.setState(({ page }) =>
+        ({ page: page - 1 }));
+    };
+
+    resetPage = () => {
+      this.setState({ page: 1 })
+    };
+
+    render() {
+      //console.log("App render");
+  
+    
+      const {imageName, page} = this.state;
+      
+      return (
+        <Container>
+          <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
+          <ImageGallery imageName={imageName} scroll={this.scroll} page={page} incrementPage={this.incrementPage} decrementPage={this.decrementPage} />
+          <ToastContainer autoClose={3000} /> 
+        </Container>
+      )
   }
 
 }
