@@ -53,11 +53,6 @@ class App extends Component {
         ({ page: page + 1 }));
     };
 
-    decrementPage = () => {
-      this.setState(({ page }) =>
-        ({ page: page - 1 }));
-    };
-
     resetPage = () => {
       this.setState({ page: 1 })
     };
@@ -69,7 +64,7 @@ class App extends Component {
       return (
         <Container>
           <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
-          <ImageGallery imageName={imageName} scroll={this.scroll} page={page} incrementPage={this.incrementPage} decrementPage={this.decrementPage} />
+          <ImageGallery imageName={imageName} scroll={this.scroll} page={page} incrementPage={this.incrementPage} />
           <ToastContainer autoClose={3000} /> 
         </Container>
       )
