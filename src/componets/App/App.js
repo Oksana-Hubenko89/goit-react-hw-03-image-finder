@@ -29,6 +29,7 @@ class App extends Component {
       if (parsedImages) {
         this.setState({ imageName: parsedImages });
       }
+     
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -39,15 +40,9 @@ class App extends Component {
 
       localStorage.setItem('imageName', JSON.stringify(this.state.imageName));
       }
-    };
-
-    scroll = () => {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth',
-      });
-    };
         
+    };
+            
     handleFormSubmit = imageName => {
       this.setState({ imageName });
       this.resetPage();

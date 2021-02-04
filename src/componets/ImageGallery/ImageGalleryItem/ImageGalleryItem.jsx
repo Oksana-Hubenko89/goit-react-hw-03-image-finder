@@ -2,25 +2,10 @@ import React from 'react';
 import s from './ImageGalleryItem.module.css';
 
 
-function ImageGalleryItem({ onClick, images} ) {
-    return (<>
-        {
-            images.map(({ id, tags, webformatURL ,largeImageURL}) =>
-                <li key={id} className={s.ImageGalleryItem} onClick={()=>onClick(largeImageURL)}>
-                    <img src={webformatURL}  alt={tags} className={s.ImageGalleryItemImage} style={{ minHeight: 40 }} />
-                </li>)
-           
-        } 
-        </>
-    )
-};
-   
-        
-    
-      
-
-    
- 
-
-
+const ImageGalleryItem=({ onClick,src, alt,largeImageURL })=> 
+                <li  className={s.ImageGalleryItem} onClick={()=>onClick(largeImageURL)}>
+                    <img src={src}  alt={alt} className={s.ImageGalleryItemImage} style={{ minHeight: 40 }} />
+                </li>
+;
+  
 export default ImageGalleryItem;

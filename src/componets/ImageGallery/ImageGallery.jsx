@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import ImageGalleryItem from './ImageGalleryItem';
 import s from './ImageGallery.module.css';
-import imageApi from '../imageApi';
+import imageApi from '../../service/imageApi';
 import ImageErrorView from '../ImageErrorView';
 import Button from '../Button';
 import Loader from '../Loader';
@@ -40,25 +40,42 @@ class ImageGallery extends PureComponent {
         const prevPage = prevProps.page;
         const nextPage = this.props.page;
  
-            if (nextImage !== prevImage || nextPage !== prevPage) {
+        if (nextPage !== prevPage || nextImage !== prevImage )   {
             this.setState({ status: 'pending' });
-                imageApi.fetchImage({ nextImage, nextPage })
-                .then(data => {
-                    if (data.hits.length > 0) {
+        imageApi.fetchImage({ nextImage, nextPage })
+            .then(data => {
+
+                if (data.hits.length !== 0) {
+                    if (nextImage !== prevImage) {
                         return (
-                            this.setState(({images })=>({images:[...data.hits] })),
+                            this.setState({ images: [...data.hits] }),
+                            this.setState({ status: 'resolved' })
+                        )
+                    };
+
+                    if (nextImage === prevImage ) {
+                        return (
+                            this.setState(({ images }) => ({ images: [...images, ...data.hits] })),
                             this.setState({ status: 'resolved' }))
-                    }
-                    return Promise.reject(
-                        new Error(`Нет картинки с имененeм ${nextImage}`),);
+                    };
+                }   
                 
-                } )
-                        
-                .catch(error => this.setState({ error, status: 'rejected' }))
-                .finally(this.props.scroll)
-            };
+                return Promise.reject(
+                        new Error(`Нет картинки с имененeм ${nextImage}`),); 
+                
+            })
+            
+            .catch(error => this.setState({ error, status: 'rejected' }))
+            .finally(this.scroll)}
     };
 
+    scroll = () => {
+        window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+    
     togleModal = largeImageURL => {
         this.setState(({ showModal }) => ({
             showModal: !showModal
@@ -69,7 +86,6 @@ class ImageGallery extends PureComponent {
     handleDecrement = () => {
         if (this.props.page > 1) {
             this.props.decrementPage();
-        this.props.scroll();
             return;  
         };
         return toast.error(`Please click on Search more... or enter a new name image`);
@@ -79,7 +95,6 @@ class ImageGallery extends PureComponent {
     handleIncrement=()=> {
         if (this.state.images.length > 0) {
             this.props.incrementPage();
-        this.props.scroll();
         return;
         };
         return toast.error(`Enter a new name image or click Back...`); 
@@ -102,11 +117,16 @@ class ImageGallery extends PureComponent {
                 return < >
                 
                     <ul className={s.ImageGallery}>
-                        <ImageGalleryItem images={images} onClick={this.togleModal} largeImageURL={largeImageURL} />
-                         {showModal && <Modal togleModal={togleModal} largeImageURL={largeImageURL}/> }
+                        {images.map(({ id, largeImageURL, tags, webformatURL  }) =>
+                        (<ImageGalleryItem key={id} images={images} onClick={this.togleModal} src={webformatURL} alt={ tags} largeImageURL={largeImageURL} />
+                        ))
+                        }
+                        
                     </ul>
+                     {showModal && <Modal togleModal={togleModal} largeImageURL={largeImageURL}/> }
                     <Button onSubmit={this.handleIncrement}>Search more...</Button>
                     <Button onSubmit={this.handleDecrement}>Back...</Button>
+
                     </>
             };
 
