@@ -83,15 +83,6 @@ class ImageGallery extends PureComponent {
         this.setState(({ largeImageURL }));
     };
     
-    handleDecrement = () => {
-        if (this.props.page > 1) {
-            this.props.decrementPage();
-            return;  
-        };
-        return toast.error(`Please click on Search more... or enter a new name image`);
-        
-    };
-
     handleIncrement=()=> {
         if (this.state.images.length > 0) {
             this.props.incrementPage();
@@ -117,16 +108,14 @@ class ImageGallery extends PureComponent {
                 return < >
                 
                     <ul className={s.ImageGallery}>
-                        {images.map(({ id, largeImageURL, tags, webformatURL  }) =>
-                        (<ImageGalleryItem key={id} images={images} onClick={this.togleModal} src={webformatURL} alt={ tags} largeImageURL={largeImageURL} />
+                        {images.map(({ largeImageURL, tags, webformatURL  }) =>
+                        (<ImageGalleryItem key={largeImageURL} images={images} onClick={this.togleModal} src={webformatURL} alt={ tags} largeImageURL={largeImageURL} />
                         ))
                         }
                         
                     </ul>
                      {showModal && <Modal togleModal={togleModal} largeImageURL={largeImageURL}/> }
-                    <Button onSubmit={this.handleIncrement}>Search more...</Button>
-                    <Button onSubmit={this.handleDecrement}>Back...</Button>
-
+                   <Button onSubmit={this.handleIncrement}>Search more...</Button>
                     </>
             };
 
