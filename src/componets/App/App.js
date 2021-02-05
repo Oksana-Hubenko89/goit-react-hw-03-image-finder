@@ -20,32 +20,12 @@ class App extends Component {
       imageName: null,
     };
 
-    componentDidMount() {
-      console.log('App componentDidMount');
-    
-      const imageName = localStorage.getItem("imageName");
-      const parsedImages = JSON.parse(imageName);
-
-      if (parsedImages) {
-        this.setState({ imageName: parsedImages });
-      }
-     
-    };
-
-    componentDidUpdate(prevProps, prevState) {
-      console.log('App componentDidUpdate');
-
-      if (this.state.imageName !== prevState.imageName) {
-        console.log('Oбновилось поле images, записываю в хранилище');
-
-      localStorage.setItem('imageName', JSON.stringify(this.state.imageName));
-      }
-        
-    };
-            
-    handleFormSubmit = imageName => {
+             
+  handleFormSubmit = imageName => {
+   
       this.setState({ imageName });
       this.resetPage();
+
     };
   
     incrementPage = () => {

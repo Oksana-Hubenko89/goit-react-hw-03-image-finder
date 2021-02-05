@@ -24,24 +24,30 @@ class ImageGallery extends PureComponent {
    
   componentDidMount() {
         console.log('App componentDidMount');
-    
+      
         const images = localStorage.getItem("images");
         const parsedImages = JSON.parse(images);
 
-        if (parsedImages) {
-        this.setState({ images: parsedImages });
-        }
+      if (parsedImages) {
+            this.setState({ images: parsedImages });
+            this.setState({ status: 'resolved' });
+      }
+      
     };
 
     componentDidUpdate(prevProps, prevState) {
-
+      
         const prevImage = prevProps.imageName;
         const nextImage = this.props.imageName;
         const prevPage = prevProps.page;
         const nextPage = this.props.page;
- 
-        if (nextPage !== prevPage || nextImage !== prevImage )   {
+
+        localStorage.setItem('images', JSON.stringify(this.state.images));
+
+        if (nextPage !== prevPage || nextImage !== prevImage )  {
+
             this.setState({ status: 'pending' });
+            
         imageApi.fetchImage({ nextImage, nextPage })
             .then(data => {
 
@@ -58,6 +64,9 @@ class ImageGallery extends PureComponent {
                             this.setState(({ images }) => ({ images: [...images, ...data.hits] })),
                             this.setState({ status: 'resolved' }))
                     };
+                   
+                    return this.setState({ status: 'resolved' });
+                     
                 }   
                 
                 return Promise.reject(
@@ -83,8 +92,9 @@ class ImageGallery extends PureComponent {
         this.setState(({ largeImageURL }));
     };
     
-    handleIncrement=()=> {
+    handleIncrement = () => {
         if (this.state.images.length > 0) {
+            localStorage.removeItem('images');
             this.props.incrementPage();
         return;
         };
@@ -93,18 +103,13 @@ class ImageGallery extends PureComponent {
 
         render() {
             const {error, status , images, largeImageURL, showModal} = this.state;
-            
             const {togleModal} = this;
 
             if (status === 'idle') {
                 return <div>Введите название картинки</div>
             };
 
-            if (status === 'pending') {
-                return <Loader/>
-            };
-
-            if (status === 'resolved') {
+            if (status === 'resolved' || status === 'pending') {
                 return < >
                 
                     <ul className={s.ImageGallery}>
@@ -115,7 +120,7 @@ class ImageGallery extends PureComponent {
                         
                     </ul>
                      {showModal && <Modal togleModal={togleModal} largeImageURL={largeImageURL}/> }
-                   <Button onSubmit={this.handleIncrement}>Search more...</Button>
+                  {status === 'pending'?<Loader/>: <Button onSubmit={this.handleIncrement}>Search more...</Button>}
                     </>
             };
 
