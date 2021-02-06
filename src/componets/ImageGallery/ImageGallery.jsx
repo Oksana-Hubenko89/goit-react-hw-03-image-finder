@@ -22,18 +22,23 @@ class ImageGallery extends PureComponent {
         status: 'idle',
     };
    
-  componentDidMount() {
-        console.log('App componentDidMount');
+    // componentDidMount() {
       
-        const images = localStorage.getItem("images");
-        const parsedImages = JSON.parse(images);
+    //     console.log('App componentDidMount');
+    //     const images = sessionStorage.getItem("images");
+    //     const parsedImages = JSON.parse(images);
 
-      if (parsedImages) {
-            this.setState({ images: parsedImages });
-            this.setState({ status: 'resolved' });
-      }
-      
-    };
+    //   if (parsedImages) {
+    //         this.setState({ images: parsedImages });
+    //   }
+    // };
+
+    // componentWillUnmount() {
+    //   this.setState({ status: 'idle' });
+    //   localStorage.clear();
+    // }
+
+    
 
     componentDidUpdate(prevProps, prevState) {
       
@@ -42,9 +47,12 @@ class ImageGallery extends PureComponent {
         const prevPage = prevProps.page;
         const nextPage = this.props.page;
 
-        localStorage.setItem('images', JSON.stringify(this.state.images));
+       
+    
 
         if (nextPage !== prevPage || nextImage !== prevImage )  {
+
+            
 
             this.setState({ status: 'pending' });
             
@@ -93,9 +101,10 @@ class ImageGallery extends PureComponent {
     };
     
     handleIncrement = () => {
+       
         if (this.state.images.length > 0) {
-            localStorage.removeItem('images');
-            this.props.incrementPage();
+            this.props.incrementPage(this.state.image);
+            
         return;
         };
         return toast.error(`Enter a new name image or click Back...`); 
